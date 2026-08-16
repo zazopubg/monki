@@ -1,0 +1,890 @@
+avahi/
+│
+│   ══════════════════════════════════════════
+│   ║  1. ملفات الإعدادات في الجذر          ║
+│   ══════════════════════════════════════════
+│
+├── pubspec.yaml                      ← تعريف المشروع وكل الحزم
+├── pubspec.lock                      ← قفل نسخ الحزم (يولَّد تلقائياً)
+├── analysis_options.yaml             ← قواعد Lint للفريق
+├── .gitignore
+├── .metadata                         ← بيانات Flutter (يولَّد تلقائياً)
+├── README.md
+├── Makefile                          ← أوامر اختصار (build, test, gen)
+├── build.yaml                        ← إعدادات code generation إن وُجد
+│
+│   ══════════════════════════════════════════
+│   ║  2. مجلدات المنصات الأصلية            ║
+│   ══════════════════════════════════════════
+│
+├── 📁 android/                       ← منصة Android
+│   ├── 📁 app/
+│   │   ├── 📁 src/
+│   │   │   ├── 📁 main/
+│   │   │   │   ├── AndroidManifest.xml   ← الصلاحيات ⭐
+│   │   │   │   ├── 📁 res/
+│   │   │   │   │   ├── 📁 drawable/      ← أيقونات الإشعارات
+│   │   │   │   │   ├── 📁 mipmap-*/      ← أيقونة التطبيق
+│   │   │   │   │   └── 📁 values/
+│   │   │   │   │       ├── styles.xml
+│   │   │   │   │       └── strings.xml
+│   │   │   │   └── 📁 kotlin/
+│   │   │   │       └── MainActivity.kt
+│   │   │   └── 📁 debug/
+│   │   │       └── AndroidManifest.xml   ← صلاحيات إضافية للتطوير
+│   │   └── build.gradle                  ← minSdk, targetSdk
+│   ├── build.gradle
+│   ├── gradle.properties
+│   ├── settings.gradle
+│   └── gradle/wrapper/gradle-wrapper.properties
+│
+├── 📁 ios/                           ← منصة iOS (الآيفون) ⭐
+│   ├── 📁 Runner/
+│   │   ├── Info.plist                ← الصلاحيات: GPS, كاميرا ⭐
+│   │   ├── Runner.entitlements       ← إشعارات، خدمات
+│   │   ├── 📁 Assets.xcassets/
+│   │   │   ├── 📁 AppIcon.appiconset/    ← أيقونات iOS
+│   │   │   └── 📁 LaunchImage.imageset/  ← شاشة البداية
+│   │   ├── 📁 Base.lproj/
+│   │   │   ├── Main.storyboard
+│   │   │   └── LaunchScreen.storyboard
+│   │   ├── AppDelegate.swift
+│   │   └── Runner-Bridging-Header.h
+│   ├── 📁 Runner.xcodeproj/
+│   ├── 📁 Runner.xcworkspace/
+│   ├── Podfile                       ← اعتماديات CocoaPods
+│   ├── Podfile.lock
+│   ├── 📁 Flutter/
+│   │   ├── Debug.xcconfig
+│   │   ├── Release.xcconfig
+│   │   └── AppFrameworkInfo.plist
+│   └── 📁 RunnerTests/
+│
+├── 📁 windows/                       ← منصة Windows ⭐
+│   ├── 📁 runner/
+│   │   ├── main.cpp
+│   │   ├── flutter_window.cpp
+│   │   ├── utils.cpp
+│   │   ├── win32_window.cpp
+│   │   ├── 📁 resources/
+│   │   │   └── app_icon.ico          ← أيقونة الويندوز
+│   │   └── Runner.rc
+│   ├── 📁 flutter/
+│   │   ├── CMakeLists.txt
+│   │   └── generated_plugins.cmake
+│   └── CMakeLists.txt
+│
+│   ══════════════════════════════════════════
+│   ║  3. مجلد الأصول (Assets)              ║
+│   ══════════════════════════════════════════
+│
+├── 📁 assets/
+│   ├── 📁 images/
+│   │   ├── logo.png
+│   │   ├── logo_white.png
+│   │   ├── onboarding_1.png
+│   │   ├── onboarding_2.png
+│   │   └── empty_states/
+│   │       ├── no_tasks.png
+│   │       ├── no_reports.png
+│   │       └── no_connection.png
+│   ├── 📁 icons/
+│   │   ├── 📁 svg/                   ← أيقونات متجهة (الأفضل)
+│   │   │   ├── helmet.svg
+│   │   │   ├── blueprint.svg
+│   │   │   ├── crane.svg
+│   │   │   └── attendance.svg
+│   │   └── 📁 png/
+│   ├── 📁 fonts/
+│   │   ├── Cairo-Regular.ttf         ← الخط العربي الرئيسي ⭐
+│   │   ├── Cairo-Bold.ttf
+│   │   ├── Cairo-Medium.ttf
+│   │   ├── IBM-Plex-Sans-Arabic-Regular.ttf
+│   │   └── IBM-Plex-Sans-Arabic-Bold.ttf
+│   ├── 📁 animations/                ← ملفات Lottie
+│   │   ├── sync_loading.json
+│   │   ├── success_check.json
+│   │   └── offline_warning.json
+│   └── 📁 l10n/                      ← ملفات الترجمة المصدرية
+│       ├── app_ar.arb                ← العربية (الافتراضية) ⭐
+│       └── app_en.arb                ← الإنجليزية
+│
+│   ══════════════════════════════════════════
+│   ║  4. المجلد الرئيسي lib/               ║
+│   ══════════════════════════════════════════
+│
+├── 📁 lib/
+│   │
+│   ├── main.dart                     ← نقطة الدخول
+│   ├── app.dart                      ← MaterialApp + Directionality(RTL)
+│   ├── bootstrap.dart                ← التهيئة: DI, DB, Sync, Auth
+│   │
+│   │
+│   │   ┌─────────────────────────────────────┐
+│   │   │  4.1  core/ — الأساسيات            │
+│   │   └─────────────────────────────────────┘
+│   │
+│   ├── 📁 core/
+│   │   │
+│   │   ├── 📁 config/
+│   │   │   ├── env.dart                  ← متغيرات البيئة
+│   │   │   ├── env.dev.dart
+│   │   │   ├── env.staging.dart
+│   │   │   ├── env.prod.dart
+│   │   │   └── app_config.dart           ← اسم التطبيق، الإصدار، روابط
+│   │   │
+│   │   ├── 📁 platform/                  ← تكييف المنصات ⭐
+│   │   │   ├── platform_detector.dart    ← هل Windows/iOS/Android؟
+│   │   │   ├── shell_mode.dart           ← enum: mobile, tablet, desktop
+│   │   │   ├── capability_service.dart   ← ما القدرات المتاحة؟ ⭐
+│   │   │   └── device_info_service.dart  ← معلومات الجهاز للتدقيق
+│   │   │
+│   │   ├── 📁 constants/
+│   │   │   ├── app_constants.dart        ← ثوابت عامة
+│   │   │   ├── roles.dart                ← تعريف الأدوار ⭐
+│   │   │   ├── permissions.dart          ← مصفوفة الصلاحيات ⭐
+│   │   │   ├── storage_keys.dart         ← مفاتيح SharedPreferences
+│   │   │   └── api_constants.dart        ← أسماء الجداول/المسارات
+│   │   │
+│   │   ├── 📁 errors/
+│   │   │   ├── app_exception.dart        ← الاستثناء الأساسي
+│   │   │   ├── network_exception.dart
+│   │   │   ├── auth_exception.dart
+│   │   │   ├── permission_exception.dart
+│   │   │   ├── sync_exception.dart
+│   │   │   └── failure.dart              ← نمط Result/Failure
+│   │   │
+│   │   ├── 📁 utils/
+│   │   │   ├── id_generator.dart         ← UUID لكل عملية ⭐
+│   │   │   ├── date_formatter.dart       ← تنسيق التواريخ العربية
+│   │   │   ├── number_formatter.dart     ← فواصل الآلاف
+│   │   │   ├── validators.dart           ← تحقق من المدخلات
+│   │   │   ├── gps_helper.dart           ← إحداثيات الموقع ⭐
+│   │   │   ├── connectivity_helper.dart  ← حالة الشبكة
+│   │   │   ├── image_compressor.dart     ← ضغط الصور قبل الرفع ⭐
+│   │   │   ├── file_helper.dart
+│   │   │   ├── logger.dart               ← تسجيل موحد
+│   │   │   └── extensions/
+│   │   │       ├── context_extensions.dart
+│   │   │       ├── string_extensions.dart
+│   │   │       ├── datetime_extensions.dart
+│   │   │       └── widget_extensions.dart
+│   │   │
+│   │   ├── 📁 services/
+│   │   │   ├── auth_service.dart         ← إدارة الجلسة والأدوار
+│   │   │   ├── session_service.dart      ← صلاحية التوكن
+│   │   │   ├── notification_service.dart ← إشعارات محلية + Push ⭐
+│   │   │   ├── location_service.dart     ← GPS مع فحص الصلاحيات
+│   │   │   ├── camera_service.dart       ← التقاط الصور
+│   │   │   ├── file_picker_service.dart
+│   │   │   ├── print_service.dart        ← طباعة (Windows) ⭐
+│   │   │   ├── share_service.dart        ← مشاركة ملفات
+│   │   │   └── haptic_service.dart       ← اهتزاز عند الضغط
+│   │   │
+│   │   └── 📁 di/                        ← Dependency Injection ⭐
+│   │       ├── injection_container.dart  ← الربط الرئيسي
+│   │       ├── core_module.dart
+│   │       ├── data_module.dart
+│   │       ├── domain_module.dart
+│   │       └── features_module.dart
+│   │
+│   │
+│   │   ┌─────────────────────────────────────┐
+│   │   │  4.2  domain/ — منطق العمل النقي   │
+│   │   └─────────────────────────────────────┘
+│   │
+│   ├── 📁 domain/
+│   │   │
+│   │   ├── 📁 entities/                  ← الكيانات النقية
+│   │   │   ├── company.dart              ← الشركة المستأجرة
+│   │   │   ├── app_user.dart             ← المستخدم + دوره
+│   │   │   ├── project.dart              ← المشروع
+│   │   │   ├── project_member.dart       ← عضوية مستخدم في مشروع
+│   │   │   ├── task.dart                 ← المهمة
+│   │   │   ├── attendance_record.dart    ← سجل الحضور ⭐
+│   │   │   ├── field_report.dart         ← التقرير الميداني ⭐
+│   │   │   ├── punch_item.dart           ← بند العيوب
+│   │   │   ├── site_photo.dart           ← الصورة الميدانية
+│   │   │   ├── document.dart             ← المستند
+│   │   │   ├── blueprint.dart            ← المخطط (مرحلة لاحقة)
+│   │   │   └── audit_log.dart            ← سجل التدقيق
+│   │   │
+│   │   ├── 📁 enums/
+│   │   │   ├── user_role.dart            ← worker, foreman, engineer, pm, admin ⭐
+│   │   │   ├── project_status.dart       ← planning, active, on_hold, completed
+│   │   │   ├── task_status.dart          ← pending, in_progress, done, blocked
+│   │   │   ├── task_priority.dart        ← low, medium, high, urgent
+│   │   │   ├── report_status.dart        ← draft, submitted, reviewed, rejected ⭐
+│   │   │   ├── attendance_type.dart      ← check_in, check_out
+│   │   │   ├── sync_state.dart           ← pending, syncing, synced, conflict, failed ⭐
+│   │   │   ├── punch_status.dart         ← open, in_progress, closed
+│   │   │   └── weather_condition.dart    ← sunny, cloudy, rainy, storm
+│   │   │
+│   │   ├── 📁 repositories/              ← الواجهات Interfaces فقط ⭐
+│   │   │   ├── i_auth_repository.dart
+│   │   │   ├── i_company_repository.dart
+│   │   │   ├── i_project_repository.dart
+│   │   │   ├── i_task_repository.dart
+│   │   │   ├── i_attendance_repository.dart
+│   │   │   ├── i_report_repository.dart
+│   │   │   ├── i_punch_repository.dart
+│   │   │   ├── i_photo_repository.dart
+│   │   │   └── i_document_repository.dart
+│   │   │
+│   │   ├── 📁 usecases/                  ← حالات الاستخدام ⭐
+│   │   │   ├── 📁 auth/
+│   │   │   │   ├── login_usecase.dart
+│   │   │   │   ├── logout_usecase.dart
+│   │   │   │   └── get_current_user_usecase.dart
+│   │   │   ├── 📁 attendance/
+│   │   │   │   ├── check_in_usecase.dart       ← مع GPS + UUID ⭐
+│   │   │   │   ├── check_out_usecase.dart
+│   │   │   │   └── get_today_attendance_usecase.dart
+│   │   │   ├── 📁 tasks/
+│   │   │   │   ├── get_my_tasks_usecase.dart
+│   │   │   │   ├── update_task_status_usecase.dart
+│   │   │   │   └── assign_task_usecase.dart
+│   │   │   ├── 📁 reports/
+│   │   │   │   ├── save_draft_report_usecase.dart
+│   │   │   │   ├── submit_report_usecase.dart  ← يقفل التقرير ⭐
+│   │   │   │   └── review_report_usecase.dart
+│   │   │   ├── 📁 projects/
+│   │   │   │   ├── get_my_projects_usecase.dart
+│   │   │   │   └── get_project_dashboard_usecase.dart
+│   │   │   └── 📁 punch/
+│   │   │       ├── create_punch_item_usecase.dart
+│   │   │       └── close_punch_item_usecase.dart
+│   │   │
+│   │   └── 📁 validators/
+│   │       ├── attendance_validator.dart  ← لا تكرار، لا تاريخ مستقبلي ⭐
+│   │       ├── report_validator.dart
+│   │       └── task_validator.dart
+│   │
+│   │
+│   │   ┌─────────────────────────────────────┐
+│   │   │  4.3  data/ — طبقة البيانات        │
+│   │   └─────────────────────────────────────┘
+│   │
+│   ├── 📁 data/
+│   │   │
+│   │   ├── 📁 cloud/                     ← الخدمة السحابية ⭐
+│   │   │   │
+│   │   │   ├── 📁 supabase/
+│   │   │   │   ├── supabase_client_provider.dart  ← إنشاء العميل
+│   │   │   │   ├── supabase_auth_service.dart     ← تسجيل/دخول/Claims ⭐
+│   │   │   │   ├── 📁 repositories/
+│   │   │   │   │   ├── company_repository_impl.dart
+│   │   │   │   │   ├── project_repository_impl.dart
+│   │   │   │   │   ├── task_repository_impl.dart
+│   │   │   │   │   ├── attendance_repository_impl.dart
+│   │   │   │   │   ├── report_repository_impl.dart
+│   │   │   │   │   ├── punch_repository_impl.dart
+│   │   │   │   │   ├── photo_repository_impl.dart
+│   │   │   │   │   └── document_repository_impl.dart
+│   │   │   │   ├── 📁 realtime/
+│   │   │   │   │   ├── realtime_manager.dart      ← إدارة القنوات ⭐
+│   │   │   │   │   ├── report_subscription.dart
+│   │   │   │   │   ├── attendance_subscription.dart
+│   │   │   │   │   └── task_subscription.dart
+│   │   │   │   └── 📁 queries/           ← استعلامات معقدة جاهزة
+│   │   │   │       ├── dashboard_queries.dart
+│   │   │   │       └── attendance_summary_queries.dart
+│   │   │   │
+│   │   │   ├── 📁 storage/
+│   │   │   │   ├── photo_storage_service.dart     ← رفع/تنزيل الصور ⭐
+│   │   │   │   ├── document_storage_service.dart
+│   │   │   │   └── storage_path_builder.dart      ← /companies/{cid}/... ⭐
+│   │   │   │
+│   │   │   └── 📁 dto/                   ← Data Transfer Objects
+│   │   │       ├── company_dto.dart
+│   │   │       ├── user_dto.dart
+│   │   │       ├── project_dto.dart
+│   │   │       ├── task_dto.dart
+│   │   │       ├── attendance_dto.dart
+│   │   │       ├── report_dto.dart
+│   │   │       └── punch_item_dto.dart
+│   │   │
+│   │   ├── 📁 local/                     ← Offline-first ⭐
+│   │   │   ├── local_database.dart       ← Isar أو Drift
+│   │   │   ├── 📁 tables/
+│   │   │   │   ├── task_table.dart
+│   │   │   │   ├── attendance_table.dart
+│   │   │   │   ├── report_table.dart
+│   │   │   │   ├── photo_queue_table.dart
+│   │   │   │   └── outbox_table.dart     ← طابور العمليات المعلّقة ⭐
+│   │   │   ├── 📁 daos/
+│   │   │   │   ├── task_dao.dart
+│   │   │   │   ├── attendance_dao.dart
+│   │   │   │   ├── report_dao.dart
+│   │   │   │   ├── photo_dao.dart
+│   │   │   │   └── outbox_dao.dart
+│   │   │   └── 📁 migrations/
+│   │   │       └── database_migrations.dart
+│   │   │
+│   │   ├── 📁 sync/                      ← محرك المزامنة ⭐
+│   │   │   ├── sync_engine.dart          ← المنسق الرئيسي ⭐
+│   │   │   ├── sync_scheduler.dart       ← جدولة حسب المنصة ⭐
+│   │   │   │                              (iOS: عند الفتح، Android: خلفية)
+│   │   │   ├── 📁 outbox/
+│   │   │   │   ├── outbox_queue.dart     ← FIFO مع أولويات
+│   │   │   │   ├── outbox_processor.dart
+│   │   │   │   └── idempotency_helper.dart
+│   │   │   ├── 📁 strategies/
+│   │   │   │   ├── sync_strategy.dart    ← الواجهة
+│   │   │   │   ├── continuous_sync.dart  ← Android/Windows
+│   │   │   │   └── foreground_sync.dart  ← iOS ⭐
+│   │   │   ├── 📁 conflict/
+│   │   │   │   ├── conflict_resolver.dart
+│   │   │   │   ├── first_write_wins.dart ← للحضور ⭐
+│   │   │   │   ├── last_write_wins.dart  ← للمهام
+│   │   │   │   └── manual_resolve.dart   ← للكميات المتعارضة
+│   │   │   ├── 📁 retry/
+│   │   │   │   ├── exponential_backoff.dart
+│   │   │   │   └── retry_policy.dart
+│   │   │   └── 📁 connectivity/
+│   │   │       └── network_monitor.dart  ← مراقبة الاتصال ⭐
+│   │   │
+│   │   └── 📁 repositories_impl/         ← دمج Cloud + Local ⭐
+│   │       ├── attendance_repository_impl.dart  ← محلي أولاً ثم سحابي
+│   │       ├── task_repository_impl.dart
+│   │       └── report_repository_impl.dart
+│   │
+│   │
+│   │   ┌─────────────────────────────────────┐
+│   │   │  4.4  ui/ — نظام التصميم           │
+│   │   └─────────────────────────────────────┘
+│   │
+│   ├── 📁 ui/
+│   │   │
+│   │   ├── 📁 theme/
+│   │   │   ├── avahi_theme.dart          ← الثيم الرئيسي (light/dark)
+│   │   │   ├── avahi_colors.dart         ← الألوان الدلالية ⭐
+│   │   │   │                              (أخضر=مكتمل، أحمر=متأخر، أصفر=جارٍ)
+│   │   │   ├── avahi_typography.dart     ← الخطوط والأحجام ⭐
+│   │   │   ├── avahi_spacing.dart        ← نظام المسافات
+│   │   │   ├── avahi_radius.dart         ← زوايا الحواف
+│   │   │   ├── avahi_shadows.dart
+│   │   │   └── text_scale_guard.dart     ← clamp(0.85, 1.4) ⭐
+│   │   │
+│   │   ├── 📁 rtl/                       ← دعم العربية ⭐
+│   │   │   ├── directionality_provider.dart
+│   │   │   ├── logical_extensions.dart   ← Start/End بدل Left/Right
+│   │   │   ├── icon_flip_rules.dart      ← أي أيقونة تنعكس ⭐
+│   │   │   └── number_direction.dart     ← الأرقام تبقى LTR ⭐
+│   │   │
+│   │   ├── 📁 widgets/
+│   │   │   │
+│   │   │   ├── 📁 common/                ← يعمل على كل المنصات
+│   │   │   │   ├── avahi_button.dart     ← الزر الموحد ⭐
+│   │   │   │   ├── avahi_text_field.dart
+│   │   │   │   ├── avahi_dropdown.dart
+│   │   │   │   ├── avahi_dialog.dart
+│   │   │   │   ├── status_badge.dart     ← شارة الحالة الملونة ⭐
+│   │   │   │   ├── sync_indicator.dart   ← "تمت المزامنة/بانتظار" ⭐
+│   │   │   │   ├── loading_indicator.dart
+│   │   │   │   ├── empty_state.dart      ← شاشة لا توجد بيانات
+│   │   │   │   ├── error_view.dart
+│   │   │   │   ├── avatar.dart
+│   │   │   │   └── offline_banner.dart   ← "أنت غير متصل" ⭐
+│   │   │   │
+│   │   │   ├── 📁 mobile/                ← خاص بالهاتف ⭐
+│   │   │   │   ├── field_action_button.dart    ← زر كبير 56px ⭐
+│   │   │   │   ├── glove_mode_button.dart      ← وضع القفازات 64px ⭐
+│   │   │   │   ├── bottom_action_sheet.dart
+│   │   │   │   ├── task_card.dart
+│   │   │   │   ├── report_card.dart
+│   │   │   │   ├── attendance_card.dart
+│   │   │   │   ├── photo_capture_button.dart
+│   │   │   │   ├── signature_pad.dart          ← توقيع على الشاشة
+│   │   │   │   └── mobile_list_tile.dart
+│   │   │   │
+│   │   │   ├── 📁 desktop/               ← خاص بالويندوز ⭐
+│   │   │   │   ├── data_grid_rtl.dart          ← جدول كبير RTL ⭐
+│   │   │   │   ├── virtualized_rows.dart       ← Virtualization ⭐
+│   │   │   │   ├── kpi_card.dart               ← بطاقة مؤشر
+│   │   │   │   ├── side_menu_item.dart
+│   │   │   │   ├── breadcrumb.dart
+│   │   │   │   ├── desktop_toolbar.dart
+│   │   │   │   ├── split_view.dart             ← قائمة + تفاصيل ⭐
+│   │   │   │   ├── kanban_board.dart
+│   │   │   │   └── printable_report.dart       ← للطباعة ⭐
+│   │   │   │
+│   │   │   ├── 📁 tablet/                ← للآيباد لاحقاً
+│   │   │   │   └── blueprint_viewer.dart       ← عارض المخططات ⭐
+│   │   │   │
+│   │   │   └── 📁 forms/
+│   │   │       ├── form_field_wrapper.dart
+│   │   │       ├── date_picker_field.dart
+│   │   │       ├── number_stepper.dart
+│   │   │       └── photo_attach_field.dart
+│   │   │
+│   │   ├── 📁 l10n/                      ← الترجمة ⭐
+│   │   │   ├── 📁 generated/             ← يولَّد تلقائياً
+│   │   │   │   ├── l10n.dart
+│   │   │   │   ├── l10n_ar.dart
+│   │   │   │   └── l10n_en.dart
+│   │   │   └── localization_provider.dart
+│   │   │
+│   │   └── 📁 modes/
+│   │       ├── glove_mode_provider.dart  ← تفعيل وضع القفازات ⭐
+│   │       └── dark_mode_provider.dart
+│   │
+│   │
+│   │   ┌─────────────────────────────────────┐
+│   │   │  4.5  navigation/ — التنقل         │
+│   │   └─────────────────────────────────────┘
+│   │
+│   ├── 📁 navigation/
+│   │   │
+│   │   ├── app_router.dart               ← كل المسارات (GoRouter) ⭐
+│   │   ├── route_names.dart              ← أسماء المسارات كثوابت
+│   │   ├── route_paths.dart              ← المسارات كنصوص
+│   │   │
+│   │   ├── 📁 guards/                    ← حماية المسارات ⭐
+│   │   │   ├── auth_guard.dart           ← هل مسجل الدخول؟
+│   │   │   ├── role_guard.dart           ← هل الدور مسموح؟ ⭐
+│   │   │   ├── platform_guard.dart       ← شاشة ويندوز فقط؟ ⭐
+│   │   │   └── subscription_guard.dart   ← هل الخطة تسمح؟
+│   │   │
+│   │   ├── 📁 shells/                    ← القشرة الخارجية ⭐
+│   │   │   ├── adaptive_shell.dart       ← يختار حسب المنصة ⭐
+│   │   │   ├── 📁 mobile/
+│   │   │   │   ├── mobile_shell.dart     ← Bottom Navigation ⭐
+│   │   │   │   ├── bottom_nav_bar.dart
+│   │   │   │   └── mobile_drawer.dart
+│   │   │   ├── 📁 desktop/
+│   │   │   │   ├── desktop_shell.dart    ← Sidebar + Topbar ⭐
+│   │   │   │   ├── sidebar.dart
+│   │   │   │   ├── topbar.dart
+│   │   │   │   └── notification_panel.dart
+│   │   │   └── 📁 tablet/
+│   │   │       └── tablet_shell.dart     ← للآيباد لاحقاً
+│   │   │
+│   │   └── 📁 transitions/
+│   │       └── custom_page_transitions.dart
+│   │
+│   │
+│   │   ┌─────────────────────────────────────────────┐
+│   │   │  4.6  features/ — الميزات (قلب التطبيق)    │
+│   │   └─────────────────────────────────────────────┘
+│   │
+│   └── 📁 features/
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: المصادقة Auth        ║
+│       │   ═══════════════════════════════
+│       ├── 📁 auth/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── splash_screen.dart        ← شاشة البداية
+│       │   │   │   ├── login_screen.dart         ← الدخول بالإيميل/الهاتف
+│       │   │   │   ├── pin_screen.dart           ← PIN سريع للميدان ⭐
+│       │   │   │   ├── forgot_password_screen.dart
+│       │   │   │   └── company_select_screen.dart ← لو المستخدم بعدة شركات
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── login_form.dart
+│       │   │   │   ├── pin_keypad.dart           ← لوحة أرقام كبيرة ⭐
+│       │   │   │   └── company_card.dart
+│       │   │   └── 📁 state/
+│       │   │       ├── auth_state.dart
+│       │   │       └── auth_notifier.dart
+│       │   └── auth_feature.dart                 ← Barrel file
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: الرئيسية Home        ║
+│       │   ═══════════════════════════════
+│       ├── 📁 home/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── home_screen.dart          ← يحدد المحتوى حسب الدور ⭐
+│       │   │   │   ├── worker_home.dart          ← للعامل: مهامي فقط ⭐
+│       │   │   │   ├── supervisor_home.dart      ← للمشرف: مؤشرات ميدانية ⭐
+│       │   │   │   └── manager_home.dart         ← للمدير: KPIs شاملة ⭐
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── quick_actions.dart        ← إجراءات سريعة
+│       │   │   │   ├── today_summary.dart
+│       │   │   │   └── alerts_section.dart
+│       │   │   └── 📁 state/
+│       │   │       └── home_state.dart
+│       │   └── home_feature.dart
+│       │
+│       │   ═══════════════════════════════════════
+│       │   ║  ميزة: الحضور Attendance ⭐ المحورية ║
+│       │   ═══════════════════════════════════════
+│       ├── 📁 attendance/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── check_in_screen.dart      ← زر كبير + GPS ⭐
+│       │   │   │   │   ├── check_out_screen.dart
+│       │   │   │   │   ├── today_summary_screen.dart
+│       │   │   │   │   └── my_history_screen.dart    ← سجل حضوري
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── attendance_monitor.dart   ← شاشة لحظية ⭐
+│       │   │   │       ├── attendance_table.dart     ← جدول كل العمال
+│       │   │   │       └── attendance_report.dart    ← تقرير شهري
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── big_check_in_button.dart      ← الزر الميداني ⭐
+│       │   │   │   ├── gps_status_indicator.dart     ← حالة GPS ⭐
+│       │   │   │   ├── attendance_status_badge.dart
+│       │   │   │   ├── worker_row.dart               ← صف في الجدول
+│       │   │   │   └── hours_calculator.dart
+│       │   │   └── 📁 state/
+│       │   │       ├── attendance_state.dart
+│       │   │       └── attendance_notifier.dart
+│       │   └── attendance_feature.dart
+│       │
+│       │   ═══════════════════════════════════════
+│       │   ║  ميزة: المهام Tasks                  ║
+│       │   ═══════════════════════════════════════
+│       ├── 📁 tasks/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── my_tasks_screen.dart      ← مهامي فقط ⭐
+│       │   │   │   │   ├── task_details_screen.dart
+│       │   │   │   │   └── task_update_screen.dart   ← تحديث الحالة
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── tasks_board_screen.dart   ← Kanban ⭐
+│       │   │   │       ├── tasks_list_screen.dart    ← جدول
+│       │   │   │       ├── task_details_panel.dart   ← لوحة جانبية ⭐
+│       │   │   │       └── task_assign_dialog.dart   ← إسناد
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── task_card.dart
+│       │   │   │   ├── task_status_chip.dart
+│       │   │   │   ├── task_priority_indicator.dart
+│       │   │   │   ├── kanban_column.dart
+│       │   │   │   ├── task_filter_bar.dart
+│       │   │   │   └── assignee_selector.dart
+│       │   │   └── 📁 state/
+│       │   │       ├── tasks_state.dart
+│       │   │       └── tasks_notifier.dart
+│       │   └── tasks_feature.dart
+│       │
+│       │   ═══════════════════════════════════════════
+│       │   ║  ميزة: التقارير الميدانية ⭐ المحورية  ║
+│       │   ═══════════════════════════════════════════
+│       ├── 📁 field_reports/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── report_form_screen.dart   ← النموذج ⭐
+│       │   │   │   │   ├── report_drafts_screen.dart ← المسودات
+│       │   │   │   │   ├── report_preview_screen.dart
+│       │   │   │   │   └── my_reports_screen.dart
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── reports_inbox.dart        ← الواردة لحظياً ⭐
+│       │   │   │       ├── report_review_screen.dart ← مراجعة واعتماد ⭐
+│       │   │   │       ├── reports_archive.dart
+│       │   │   │       └── report_export_screen.dart ← تصدير PDF/Excel
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── report_form_fields.dart
+│       │   │   │   ├── weather_selector.dart         ← حالة الطقس
+│       │   │   │   ├── labor_count_input.dart        ← عدد العمالة
+│       │   │   │   ├── report_photo_attach.dart
+│       │   │   │   ├── report_status_badge.dart
+│       │   │   │   ├── report_card.dart
+│       │   │   │   └── report_approval_actions.dart
+│       │   │   └── 📁 state/
+│       │   │       ├── report_form_state.dart
+│       │   │       ├── reports_inbox_state.dart
+│       │   │       └── reports_notifier.dart
+│       │   └── field_reports_feature.dart
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: الصور Photos          ║
+│       │   ═══════════════════════════════
+│       ├── 📁 photos/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── camera_screen.dart        ← الكاميرا ⭐
+│       │   │   │   │   ├── photo_attach_screen.dart  ← ربط بمهمة/موقع
+│       │   │   │   │   └── my_photos_screen.dart
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── photo_gallery.dart        ← معرض المشروع ⭐
+│       │   │   │       └── photo_details_panel.dart
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── photo_grid.dart
+│       │   │   │   ├── photo_thumbnail.dart
+│       │   │   │   ├── photo_viewer.dart             ← عرض كامل + تكبير
+│       │   │   │   ├── upload_progress_indicator.dart ← طابور الرفع ⭐
+│       │   │   │   └── photo_tag_selector.dart
+│       │   │   └── 📁 state/
+│       │   │       ├── photos_state.dart
+│       │   │       └── upload_queue_state.dart
+│       │   └── photos_feature.dart
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: قوائم العيوب Punch    ║
+│       │   ═══════════════════════════════
+│       ├── 📁 punch_list/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── punch_list_screen.dart    ← القائمة
+│       │   │   │   │   ├── punch_item_create.dart    ← تسجيل عيب ⭐
+│       │   │   │   │   └── punch_item_details.dart
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── punch_dashboard.dart      ← لوحة المتابعة ⭐
+│       │   │   │       └── punch_item_manage.dart
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── punch_item_card.dart
+│       │   │   │   ├── punch_status_filter.dart
+│       │   │   │   └── punch_close_form.dart         ← نموذج الإغلاق
+│       │   │   └── 📁 state/
+│       │   └── punch_list_feature.dart
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: المشاريع Projects     ║
+│       │   ═══════════════════════════════
+│       ├── 📁 projects/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   ├── my_projects_screen.dart   ← مشاريعي فقط
+│       │   │   │   │   └── project_overview.dart
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── projects_list.dart        ← كل المشاريع ⭐
+│       │   │   │       ├── project_details.dart      ← تفاصيل شاملة
+│       │   │   │       ├── project_settings.dart
+│       │   │   │       ├── project_members.dart      ← إدارة الأعضاء ⭐
+│       │   │   │       └── project_milestones.dart   ← المراحل
+│       │   │   ├── 📁 widgets/
+│       │   │   │   ├── project_card.dart
+│       │   │   │   ├── project_progress_bar.dart
+│       │   │   │   ├── project_status_badge.dart
+│       │   │   │   └── member_role_selector.dart
+│       │   │   └── 📁 state/
+│       │   └── projects_feature.dart
+│       │
+│       │   ═══════════════════════════════
+│       │   ║  ميزة: المستندات Documents   ║
+│       │   ═══════════════════════════════
+│       ├── 📁 documents/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── 📁 mobile/
+│       │   │   │   │   └── documents_list.dart       ← عرض فقط غالباً
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── documents_manager.dart    ← رفع وإدارة ⭐
+│       │   │   │       ├── document_viewer.dart      ← عرض PDF
+│       │   │   │       └── document_categories.dart
+│       │   │   └── 📁 widgets/
+│       │   └── documents_feature.dart
+│       │
+│       │   ═══════════════════════════════════
+│       │   ║  ميزة: المستخدمين Users       ║
+│       │   ═══════════════════════════════════
+│       ├── 📁 users/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   └── 📁 desktop/
+│       │   │   │       ├── users_list.dart           ← قائمة المستخدمين ⭐
+│       │   │   │       ├── user_details.dart
+│       │   │   │       ├── user_roles_edit.dart      ← تعديل الأدوار ⭐
+│       │   │   │       └── invite_user.dart          ← دعوة مستخدم
+│       │   │   └── 📁 widgets/
+│       │   │       ├── user_card.dart
+│       │   │       ├── role_badge.dart
+│       │   │       └── permissions_matrix.dart       ← مصفوفة الصلاحيات ⭐
+│       │   └── users_feature.dart
+│       │
+│       │   ═══════════════════════════════════
+│       │   ║  ميزة: الإعدادات Settings     ║
+│       │   ═══════════════════════════════════
+│       ├── 📁 settings/
+│       │   ├── 📁 presentation/
+│       │   │   ├── 📁 screens/
+│       │   │   │   ├── settings_screen.dart          ← الرئيسية
+│       │   │   │   ├── language_settings.dart        ← عربي/إنجليزي ⭐
+│       │   │   │   ├── display_settings.dart         ← الخط، الوضع الليلي
+│       │   │   │   ├── glove_mode_settings.dart      ← وضع القفازات ⭐
+│       │   │   │   ├── sync_settings.dart            ← إعدادات المزامنة ⭐
+│       │   │   │   ├── notification_settings.dart
+│       │   │   │   ├── profile_screen.dart
+│       │   │   │   └── about_screen.dart
+│       │   │   └── 📁 widgets/
+│       │   │       ├── setting_tile.dart
+│       │   │       ├── language_selector.dart
+│       │   │       └── text_scale_preview.dart       ← معاينة التكبير ⭐
+│       │   └── settings_feature.dart
+│       │
+│       │   ═══════════════════════════════════════════
+│       │   ║  ميزة: لوحة مالك المنصة (Desktop فقط)  ║
+│       │   ═══════════════════════════════════════════
+│       └── 📁 platform_admin/                  ← ⭐ للويندوز فقط
+│           ├── 📁 presentation/
+│           │   ├── 📁 screens/
+│           │   │   ├── admin_dashboard.dart          ← نظرة عامة ⭐
+│           │   │   ├── 📁 tenants/
+│           │   │   │   ├── tenants_list.dart         ← الشركات المستأجرة
+│           │   │   │   ├── tenant_details.dart
+│           │   │   │   └── tenant_create.dart
+│           │   │   ├── 📁 subscriptions/
+│           │   │   │   ├── plans_management.dart     ← الخطط
+│           │   │   │   └── billing_overview.dart
+│           │   │   ├── 📁 monitoring/
+│           │   │   │   ├── usage_monitor.dart        ← الاستهلاك ⭐
+│           │   │   │   └── error_logs.dart
+│           │   │   └── 📁 audit/
+│           │   │       └── audit_logs_viewer.dart    ← سجل التدقيق ⭐
+│           │   └── 📁 widgets/
+│           └── platform_admin_feature.dart
+│
+│
+│   ══════════════════════════════════════════
+│   ║  5. البنية الخلفية backend/            ║
+│   ══════════════════════════════════════════
+│
+├── 📁 backend/
+│   ├── 📁 supabase/
+│   │   ├── 📁 migrations/                  ← ملفات SQL مرتبة ⭐
+│   │   │   ├── 001_create_companies.sql
+│   │   │   ├── 002_create_company_members.sql
+│   │   │   ├── 003_create_projects.sql
+│   │   │   ├── 004_create_project_members.sql
+│   │   │   ├── 005_create_tasks.sql
+│   │   │   ├── 006_create_attendance.sql       ← unique(client_mutation_id) ⭐
+│   │   │   ├── 007_create_field_reports.sql
+│   │   │   ├── 008_create_punch_items.sql
+│   │   │   ├── 009_create_photos.sql
+│   │   │   ├── 010_create_documents.sql
+│   │   │   ├── 011_create_audit_logs.sql
+│   │   │   ├── 012_rls_helper_functions.sql    ← دوال العزل ⭐
+│   │   │   ├── 013_rls_policies.sql            ← كل السياسات ⭐
+│   │   │   ├── 014_audit_triggers.sql          ← تسجيل التعديلات ⭐
+│   │   │   └── 015_indexes.sql                 ← الفهارس للأداء
+│   │   │
+│   │   ├── 📁 functions/                   ← Edge Functions ⭐
+│   │   │   ├── 📁 create-company/          ← إنشاء مستأجر (Admin فقط)
+│   │   │   │   └── index.ts
+│   │   │   ├── 📁 sync-user-claims/        ← تحديث أدوار المستخدم
+│   │   │   │   └── index.ts
+│   │   │   ├── 📁 attendance-guard/        ← تحقق من تلاعب الحضور ⭐
+│   │   │   │   └── index.ts
+│   │   │   ├── 📁 report-notifications/    ← إشعار عند تقرير جديد ⭐
+│   │   │   │   └── index.ts
+│   │   │   └── 📁 soft-delete-tenant/      ← حذف شركة منطقياً
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── 📁 seed/                        ← بيانات تجريبية
+│   │   │   ├── 001_demo_company.sql
+│   │   │   ├── 002_demo_users.sql
+│   │   │   ├── 003_demo_project.sql
+│   │   │   └── 004_demo_tasks.sql
+│   │   │
+│   │   ├── config.toml                     ← إعدادات Supabase
+│   │   └── README.md
+│   │
+│   └── docker-compose.yml                  ← تشغيل محلي للتطوير ⭐
+│
+│
+│   ══════════════════════════════════════════
+│   ║  6. الاختبارات test/                   ║
+│   ══════════════════════════════════════════
+│
+├── 📁 test/
+│   ├── 📁 unit/
+│   │   ├── 📁 domain/
+│   │   │   ├── 📁 usecases/
+│   │   │   │   ├── check_in_usecase_test.dart
+│   │   │   │   └── submit_report_usecase_test.dart
+│   │   │   └── 📁 validators/
+│   │   │       └── attendance_validator_test.dart
+│   │   ├── 📁 data/
+│   │   │   ├── 📁 sync/
+│   │   │   │   ├── sync_engine_test.dart
+│   │   │   │   └── conflict_resolver_test.dart
+│   │   │   └── 📁 repositories/
+│   │   └── 📁 core/
+│   │       └── 📁 utils/
+│   │
+│   ├── 📁 widget/
+│   │   ├── 📁 features/
+│   │   │   ├── 📁 attendance/
+│   │   │   │   └── check_in_screen_test.dart
+│   │   │   └── 📁 auth/
+│   │   │       └── login_screen_test.dart
+│   │   └── 📁 ui/
+│   │       └── 📁 widgets/
+│   │
+│   ├── 📁 golden/                          ← اختبارات بصرية ⭐
+│   │   ├── 📁 text_scaling/
+│   │   │   ├── checkin_screen_scale100_test.dart
+│   │   │   ├── checkin_screen_scale130_test.dart
+│   │   │   └── checkin_screen_scale140_test.dart   ← السقف ⭐
+│   │   ├── 📁 rtl/
+│   │   │   └── rtl_layout_test.dart                ← التحقق من RTL ⭐
+│   │   └── 📁 themes/
+│   │
+│   └── 📁 integration/
+│       ├── auth_flow_test.dart
+│       ├── sync_flow_test.dart             ← مزامنة كاملة ⭐
+│       └── attendance_flow_test.dart
+│
+│
+│   ══════════════════════════════════════════
+│   ║  7. التوثيق docs/                      ║
+│   ══════════════════════════════════════════
+│
+├── 📁 docs/
+│   ├── 📁 architecture/
+│   │   ├── 01_overview.md                  ← نظرة عامة
+│   │   ├── 02_folder_structure.md          ← هذا الدليل ⭐
+│   │   ├── 03_sync_strategy.md             ← استراتيجية المزامنة ⭐
+│   │   ├── 04_data_model.md                ← نموذج البيانات
+│   │   ├── 05_platform_adaptation.md       ← تكييف المنصات ⭐
+│   │   └── 06_offline_first.md
+│   │
+│   ├── 📁 security/
+│   │   ├── rls_policies.md                 ← شرح سياسات العزل ⭐
+│   │   ├── roles_matrix.md                 ← مصفوفة الصلاحيات ⭐
+│   │   └── threat_model.md
+│   │
+│   ├── 📁 ui_guidelines/
+│   │   ├── rtl_rules.md                    ← قواعد RTL المعتمدة ⭐
+│   │   ├── text_scaling.md                 ← سياسة تكبير النص ⭐
+│   │   ├── glove_mode.md                   ← وضع القفازات ⭐
+│   │   ├── color_system.md
+│   │   └── widget_catalog.md               ← كتالوج المكونات
+│   │
+│   ├── 📁 platform_guides/
+│   │   ├── android_notes.md                ← ملاحظات أندرويد
+│   │   ├── ios_notes.md                    ← قيود iOS ⭐
+│   │   └── windows_notes.md                ← ملاحظات ويندوز ⭐
+│   │
+│   ├── 📁 onboarding/
+│   │   ├── new_developer_guide.md          ← دليل المطور الجديد ⭐
+│   │   ├── setup_guide.md                  ← إعداد البيئة
+│   │   └── coding_standards.md             ← معايير الكود
+│   │
+│   └── 📁 user_manuals/
+│       ├── field_worker_guide_ar.md        ← دليل العامل بالعربية ⭐
+│       ├── engineer_guide_ar.md
+│       └── desktop_admin_guide_ar.md
+│
+│
+│   ══════════════════════════════════════════
+│   ║  8. أدوات وسكربتات tools/             ║
+│   ══════════════════════════════════════════
+│
+└── 📁 tools/
+    ├── 📁 scripts/
+    │   ├── setup_dev.sh                    ← إعداد بيئة التطوير
+    │   ├── generate_l10n.sh                ← توليد الترجمات
+    │   ├── run_tests.sh
+    │   ├── build_android.sh
+    │   ├── build_ios.sh
+    │   ├── build_windows.sh
+    │   └── supabase_reset.sh               ← إعادة ضبط DB المحلي
+    │
+    ├── 📁 generators/
+    │   └── 📁 feature_template/            ← قالب ميزة جديدة ⭐
+    │       ├── feature_name_feature.dart
+    │       ├── 📁 presentation/
+    │       ├── 📁 state/
+    │       └── 📁 widgets/
+    │
+    └── 📁 icons_generator/
+        └── generate_icons.sh               ← توليد أيقونات المنصات
